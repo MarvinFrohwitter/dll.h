@@ -19,8 +19,14 @@ typedef struct DLL {
 } DLL;
 
 DLL *dll_new();
-int dll_insert(DLL *dll, char *item);
+int dll_push_front(DLL *dll, char *item);
+int dll_push_back(DLL *dll, char *item);
+int dll_pop_front(DLL *dll);
+int dll_pop_back(DLL *dll);
+
 int dll_delete(DLL *dll, char *item);
+int dll_insert(DLL *dll, char *item, int pos);
+
 NODE *dll_find(DLL *dll, char *needle);
 void dll_print(DLL *dll);
 void dll_free(DLL *dll);
@@ -55,20 +61,78 @@ DLL *dll_new() {
   return dll;
 }
 
-int dll_insert(DLL *dll, char *item) {
+int dll_push_front(DLL *dll, char *item) { return dll_insert(dll, item, 0); }
+
+int dll_push_back(DLL *dll, char *item) { return dll_insert(dll, item, -1); }
+
+int dll_pop_back(DLL *dll) {
+  NODE *item_node = dll->tail->prev;
+  if (dll->head->next == dll->tail) {
+    return 0;
+  }
+
+  dll->tail->prev->prev->next = dll->tail;
+  // item_node->prev->next = dll->tail;
+  dll->tail->prev = dll->tail->prev->prev;
+  // dll->tail->prev = item_node->prev;
+  free(item_node);
+  return 1;
+}
+
+int dll_pop_front(DLL *dll) {
+  NODE *item_node = dll->head->next;
+  if (dll->head->next == dll->tail) {
+    return 0;
+  }
+
+  dll->head->next->next->prev = dll->head;
+  // item_node->next->prev = dll->head;
+  dll->head->next = dll->head->next->next;
+  // dll->head = item_node->next;
+  free(item_node);
+  return 1;
+}
+
+int dll_insert(DLL *dll, char *item, int pos) {
   NODE *new_node = (NODE *)calloc(1, sizeof(NODE));
-  if (new_node == NULL) {
+  NODE *temp = (NODE *)calloc(1, sizeof(NODE));
+  if (new_node == NULL || temp == NULL) {
     fprintf(stderr, "The allocation of a new node faild with : %s\n",
             strerror(errno));
     return 1;
   }
 
-  new_node->next = dll->tail;
-  new_node->prev = dll->tail->prev;
-  dll->tail->prev->next = new_node;
-  dll->tail->prev = new_node;
   new_node->item = item;
 
+  // At the 0 Element
+  temp = dll->head->next;
+  if (pos == 0) {
+    new_node->next = dll->head->next;
+    new_node->prev = dll->head;
+    dll->head->next->prev = new_node;
+    dll->head->next = new_node;
+  } else if (pos < 0) {
+  pushback:
+    new_node->next = dll->tail;
+    new_node->prev = dll->tail->prev;
+    dll->tail->prev->next = new_node;
+    dll->tail->prev = new_node;
+  } else {
+    for (int i = 0; i < pos; ++i) {
+      if (temp == dll->tail) {
+        goto pushback;
+      }
+      temp = temp->next;
+    }
+
+    new_node->next = temp;
+    new_node->prev = temp->prev;
+    temp->prev->next = new_node;
+    temp->prev = new_node;
+  }
+
+  temp = NULL;
+  free(temp);
   return 0;
 }
 
