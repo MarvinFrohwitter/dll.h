@@ -1,4 +1,4 @@
-#define DLL_IMPLEMENTAION
+#define DLL_IMPLEMENTATION
 #include "../../c/dll/dll.h"
 
 int main(void) {

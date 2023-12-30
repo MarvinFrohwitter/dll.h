@@ -13,10 +13,14 @@ typedef struct NODE {
 
 } NODE;
 
-typedef struct DLL {
+typedef struct DLL DLL;
+
+#ifdef DLL_IMPLEMENTATION
+struct DLL {
   NODE *head;
   NODE *tail;
-} DLL;
+};
+#endif // DLL_IMPLEMENTATION
 
 DLL *dll_new();
 int dll_push_front(DLL *dll, char *item);
@@ -33,7 +37,7 @@ void dll_free(DLL *dll);
 
 #endif // DLL_H_
 
-#ifdef DLL_IMPLEMENTAION
+#ifdef DLL_IMPLEMENTATION
 
 DLL *dll_new() {
 
@@ -177,4 +181,4 @@ void dll_free(DLL *dll) {
   free(dll);
 }
 
-#endif // DLL_IMPLEMENTAION
+#endif // DLL_IMPLEMENTATION
