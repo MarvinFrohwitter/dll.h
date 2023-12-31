@@ -1,9 +1,7 @@
 SRC = dll-test.c
-OBJ = ${SRC:.c=.o}
-
 CC = cc
 LIBS =
-CFLAGS = -O3 -pedantic -Wall -Wextra -std=c11 -ggdb
+CFLAGS = -x c -O3 -pedantic -Wall -Wextra -std=c11 -ggdb
 
 all: options dll
 
@@ -14,13 +12,13 @@ options:
 	@echo "CC     = ${CC}"
 
 dll:
-	${CC} -o $@ ${SRC} ${CFLAGS} ${LIBS}
+	${CC} -DDLL_IMPLEMENTATION ${CFLAGS} ${LIBS} -c dll.h
 
 test:
 	${CC} -o $@ ${SRC} ${CFLAGS} ${LIBS}
 	./$@
 
 clean:
-	rm -f dll
+	rm -f dll.o test
 
 .PHONY: all clean options test

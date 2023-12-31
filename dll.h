@@ -6,6 +6,10 @@
 #ifndef DLL_H_
 #define DLL_H_
 
+#ifndef DLLDEF
+#define DLLDEF static inline
+#endif // DLLDEF
+
 typedef struct NODE {
   char *item;
   struct NODE *next;
@@ -22,24 +26,24 @@ struct DLL {
 };
 #endif // DLL_IMPLEMENTATION
 
-DLL *dll_new();
-int dll_push_front(DLL *dll, char *item);
-int dll_push_back(DLL *dll, char *item);
-int dll_pop_front(DLL *dll);
-int dll_pop_back(DLL *dll);
+DLLDEF DLL *dll_new();
+DLLDEF int dll_push_front(DLL *dll, char *item);
+DLLDEF int dll_push_back(DLL *dll, char *item);
+DLLDEF int dll_pop_front(DLL *dll);
+DLLDEF int dll_pop_back(DLL *dll);
 
-int dll_delete(DLL *dll, char *item);
-int dll_insert(DLL *dll, char *item, int pos);
+DLLDEF int dll_delete(DLL *dll, char *item);
+DLLDEF int dll_insert(DLL *dll, char *item, int pos);
 
-NODE *dll_find(DLL *dll, char *needle);
-void dll_print(DLL *dll);
-void dll_free(DLL *dll);
+DLLDEF NODE *dll_find(DLL *dll, char *needle);
+DLLDEF void dll_print(DLL *dll);
+DLLDEF void dll_free(DLL *dll);
 
 #endif // DLL_H_
 
 #ifdef DLL_IMPLEMENTATION
 
-DLL *dll_new() {
+DLLDEF DLL *dll_new() {
 
   DLL *dll = (DLL *)malloc(sizeof(DLL));
   if (dll == NULL) {
@@ -65,11 +69,11 @@ DLL *dll_new() {
   return dll;
 }
 
-int dll_push_front(DLL *dll, char *item) { return dll_insert(dll, item, 0); }
+DLLDEF int dll_push_front(DLL *dll, char *item) { return dll_insert(dll, item, 0); }
 
-int dll_push_back(DLL *dll, char *item) { return dll_insert(dll, item, -1); }
+DLLDEF int dll_push_back(DLL *dll, char *item) { return dll_insert(dll, item, -1); }
 
-int dll_pop_back(DLL *dll) {
+DLLDEF int dll_pop_back(DLL *dll) {
   NODE *item_node = dll->tail->prev;
   if (dll->head->next == dll->tail) {
     return 0;
@@ -83,7 +87,7 @@ int dll_pop_back(DLL *dll) {
   return 1;
 }
 
-int dll_pop_front(DLL *dll) {
+DLLDEF int dll_pop_front(DLL *dll) {
   NODE *item_node = dll->head->next;
   if (dll->head->next == dll->tail) {
     return 0;
@@ -97,7 +101,7 @@ int dll_pop_front(DLL *dll) {
   return 1;
 }
 
-int dll_insert(DLL *dll, char *item, int pos) {
+DLLDEF int dll_insert(DLL *dll, char *item, int pos) {
   NODE *new_node = (NODE *)calloc(1, sizeof(NODE));
   NODE *temp = (NODE *)calloc(1, sizeof(NODE));
   if (new_node == NULL || temp == NULL) {
@@ -140,7 +144,7 @@ int dll_insert(DLL *dll, char *item, int pos) {
   return 0;
 }
 
-int dll_delete(DLL *dll, char *item) {
+DLLDEF int dll_delete(DLL *dll, char *item) {
   NODE *item_node = dll_find(dll, item);
   if (item_node == NULL) {
     return 0;
@@ -152,7 +156,7 @@ int dll_delete(DLL *dll, char *item) {
   return 1;
 }
 
-NODE *dll_find(DLL *dll, char *needle) {
+DLLDEF NODE *dll_find(DLL *dll, char *needle) {
   NODE *temp;
   temp = dll->head->next;
   while (temp != dll->tail) {
@@ -164,7 +168,7 @@ NODE *dll_find(DLL *dll, char *needle) {
   return NULL;
 }
 
-void dll_print(DLL *dll) {
+DLLDEF void dll_print(DLL *dll) {
   NODE *temp;
   temp = dll->head->next;
   int i = 1;
@@ -175,7 +179,7 @@ void dll_print(DLL *dll) {
   }
 }
 
-void dll_free(DLL *dll) {
+DLLDEF void dll_free(DLL *dll) {
   free(dll->head);
   free(dll->tail);
   free(dll);

@@ -32,7 +32,7 @@ int main(void) {
   printf("=============================================\n");
 
   dll_insert(dll, "To Second", 1);
-  dll_insert(dll, "To trid", 3);
+  dll_insert(dll, "To Trid", 4);
 
   printf("---------------------------------------------\n");
   dll_print(dll);
