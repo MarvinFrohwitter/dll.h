@@ -28,14 +28,14 @@ int main(void) {
 
   dll_insert(dll, "To HIGH", 107);
   printf("=============================================\n");
-  dll_print(dll);
+  dll_print(stdout, dll);
   printf("=============================================\n");
 
   dll_insert(dll, "To Second", 1);
   dll_insert(dll, "To Trid", 4);
 
   printf("---------------------------------------------\n");
-  dll_print(dll);
+  dll_print(stdout, dll);
   printf("---------------------------------------------\n");
 
   dll_free(dll);

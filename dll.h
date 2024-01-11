@@ -36,7 +36,8 @@ DLLDEF int dll_delete(DLL *dll, char *item);
 DLLDEF int dll_insert(DLL *dll, char *item, int pos);
 
 DLLDEF NODE *dll_find(DLL *dll, char *needle);
-DLLDEF void dll_print(DLL *dll);
+DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll);
+DLLDEF void dll_print_full(FILE *__restrict __stream, DLL *dll);
 DLLDEF void dll_free(DLL *dll);
 
 #endif // DLL_H_
@@ -69,9 +70,13 @@ DLLDEF DLL *dll_new() {
   return dll;
 }
 
-DLLDEF int dll_push_front(DLL *dll, char *item) { return dll_insert(dll, item, 0); }
+DLLDEF int dll_push_front(DLL *dll, char *item) {
+  return dll_insert(dll, item, 0);
+}
 
-DLLDEF int dll_push_back(DLL *dll, char *item) { return dll_insert(dll, item, -1); }
+DLLDEF int dll_push_back(DLL *dll, char *item) {
+  return dll_insert(dll, item, -1);
+}
 
 DLLDEF int dll_pop_back(DLL *dll) {
   NODE *item_node = dll->tail->prev;
@@ -168,12 +173,24 @@ DLLDEF NODE *dll_find(DLL *dll, char *needle) {
   return NULL;
 }
 
-DLLDEF void dll_print(DLL *dll) {
+DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll) {
   NODE *temp;
   temp = dll->head->next;
   int i = 1;
   while (temp != dll->tail) {
-    printf("Item%d: %s \n", i, temp->item);
+    fprintf(__stream, "%s", temp->item);
+    ++i;
+    temp = temp->next;
+  }
+  fprintf(__stream, "\n");
+}
+
+DLLDEF void dll_print_full(FILE *__restrict __stream, DLL *dll) {
+  NODE *temp;
+  temp = dll->head->next;
+  int i = 1;
+  while (temp != dll->tail) {
+    fprintf(__stream, "Item%d: %s\n", i, temp->item);
     ++i;
     temp = temp->next;
   }
