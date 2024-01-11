@@ -35,7 +35,7 @@ int main(void) {
   dll_insert(dll, "To Trid", 4);
 
   printf("---------------------------------------------\n");
-  dll_print(stdout, dll);
+  dll_print_full(stdout, dll);
   printf("---------------------------------------------\n");
 
   dll_free(dll);

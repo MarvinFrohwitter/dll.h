@@ -176,10 +176,14 @@ DLLDEF NODE *dll_find(DLL *dll, char *needle) {
 DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll) {
   NODE *temp;
   temp = dll->head->next;
-  int i = 1;
-  while (temp != dll->tail) {
+
+  if (temp != dll->tail) {
     fprintf(__stream, "%s", temp->item);
-    ++i;
+    temp = temp->next;
+  }
+
+  while (temp != dll->tail) {
+    fprintf(__stream, ",%s", temp->item);
     temp = temp->next;
   }
   fprintf(__stream, "\n");
