@@ -183,10 +183,9 @@ DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll) {
   }
 
   while (temp != dll->tail) {
-    fprintf(__stream, ",%s", temp->item);
+    fprintf(__stream, ", %s", temp->item);
     temp = temp->next;
   }
-  fprintf(__stream, "\n");
 }
 
 DLLDEF void dll_print_full(FILE *__restrict __stream, DLL *dll) {
