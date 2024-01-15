@@ -112,7 +112,7 @@ DLLDEF int dll_insert(DLL *dll, char *item, int pos) {
   if (new_node == NULL || temp == NULL) {
     fprintf(stderr, "The allocation of a new node faild with : %s\n",
             strerror(errno));
-    return 1;
+    return 0;
   }
 
   new_node->item = item;
@@ -146,7 +146,7 @@ DLLDEF int dll_insert(DLL *dll, char *item, int pos) {
 
   temp = NULL;
   free(temp);
-  return 0;
+  return 1;
 }
 
 DLLDEF int dll_delete(DLL *dll, char *item) {
