@@ -1,3 +1,4 @@
+#include <string.h>
 #define DLL_IMPLEMENTATION
 #include "../../c/dll/dll.h"
 
@@ -8,12 +9,17 @@ int main(void) {
     return 1;
   }
 
-  // dll_insert(dll, "Marvin", -1);
-  // dll_insert(dll, "Lars", -1);
+  dll_insert(dll, "Marvin", -1);
+  dll_insert(dll, "Lars", -1);
   // dll_insert(dll, "Bobo", -1);
   // dll_insert(dll, "HANS", -1);
   // dll_print(dll);
 
+  char buf[32];
+  dll_print_cstr(buf, dll);
+  printf("%s\n", buf);
+
+  return 0;
   // char *name = "Bobo";
   // if (dll_find(dll, name) != NULL) {
   //   printf("Found Bobo in Linked List\n");
@@ -42,3 +48,4 @@ int main(void) {
 
   return 0;
 }
+

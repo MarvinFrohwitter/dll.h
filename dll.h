@@ -32,10 +32,12 @@ DLLDEF int dll_push_back(DLL *dll, char *item);
 DLLDEF int dll_pop_front(DLL *dll);
 DLLDEF int dll_pop_back(DLL *dll);
 
+DLLDEF void dll_clear(DLL *dll);
 DLLDEF int dll_delete(DLL *dll, char *item);
 DLLDEF int dll_insert(DLL *dll, char *item, int pos);
 
 DLLDEF NODE *dll_find(DLL *dll, char *needle);
+DLLDEF char *dll_print_cstr(char *buf, DLL *dll);
 DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll);
 DLLDEF void dll_print_full(FILE *__restrict __stream, DLL *dll);
 DLLDEF void dll_free(DLL *dll);
@@ -43,6 +45,13 @@ DLLDEF void dll_free(DLL *dll);
 #endif // DLL_H_
 
 #ifdef DLL_IMPLEMENTATION
+
+DLLDEF void dll_clear(DLL *dll) {
+  dll->head->next = dll->tail;
+  dll->head->prev = dll->tail;
+  dll->tail->prev = dll->head;
+  dll->tail->next = dll->head;
+}
 
 DLLDEF DLL *dll_new() {
 
@@ -107,7 +116,10 @@ DLLDEF int dll_pop_front(DLL *dll) {
 }
 
 DLLDEF int dll_insert(DLL *dll, char *item, int pos) {
+  size_t n = strlen(item);
   NODE *new_node = (NODE *)calloc(1, sizeof(NODE));
+  new_node->item = malloc(n + 1);
+
   NODE *temp = (NODE *)calloc(1, sizeof(NODE));
   if (new_node == NULL || temp == NULL) {
     fprintf(stderr, "The allocation of a new node faild with : %s\n",
@@ -115,7 +127,8 @@ DLLDEF int dll_insert(DLL *dll, char *item, int pos) {
     return 0;
   }
 
-  new_node->item = item;
+  new_node->item = memcpy(new_node->item, item, n);
+  // new_node->item  = item;
 
   // At the 0 Element
   temp = dll->head->next;
@@ -162,8 +175,7 @@ DLLDEF int dll_delete(DLL *dll, char *item) {
 }
 
 DLLDEF NODE *dll_find(DLL *dll, char *needle) {
-  NODE *temp;
-  temp = dll->head->next;
+  NODE *temp = dll->head->next;
   while (temp != dll->tail) {
     if (strcmp(needle, temp->item) == 0)
       return temp;
@@ -173,9 +185,25 @@ DLLDEF NODE *dll_find(DLL *dll, char *needle) {
   return NULL;
 }
 
+DLLDEF char *dll_print_cstr(char *buf, DLL *dll) {
+  NODE *temp = dll->head->next;
+
+  if (temp != dll->tail) {
+    strcat(buf, temp->item);
+    temp = temp->next;
+  }
+
+  while (temp != dll->tail) {
+    strcat(buf, ", ");
+    strcat(buf, temp->item);
+    temp = temp->next;
+  }
+
+  return buf;
+}
+
 DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll) {
-  NODE *temp;
-  temp = dll->head->next;
+  NODE *temp = dll->head->next;
 
   if (temp != dll->tail) {
     fprintf(__stream, "%s", temp->item);
@@ -189,8 +217,7 @@ DLLDEF void dll_print(FILE *__restrict __stream, DLL *dll) {
 }
 
 DLLDEF void dll_print_full(FILE *__restrict __stream, DLL *dll) {
-  NODE *temp;
-  temp = dll->head->next;
+  NODE *temp = dll->head->next;
   int i = 1;
   while (temp != dll->tail) {
     fprintf(__stream, "Item%d: %s\n", i, temp->item);
